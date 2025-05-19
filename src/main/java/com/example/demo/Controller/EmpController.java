@@ -11,43 +11,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.dto;
+import com.example.demo.Services.EmployeePayrollService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 @RequestMapping("/employeepayrollservice")
 public class EmpController {
 
+    @Autowired
+    private EmployeePayrollService payrollService;
+
     @GetMapping("/")
     public String getAllEmployees() {
-        return "Get all employee payroll data";
+        return payrollService.getAllEmployees();
     }
 
     @GetMapping("/get/{id}")
     public String getEmployee(@PathVariable("id") int id) {
-        return "Get employee data for ID: " + id;
+        return payrollService.getEmployeeById(id);
     }
 
-//    @PostMapping("/create")
-//    public String createEmployee(@RequestBody Map<String, Object> employeeData) {
-//        return "Created employee: " + employeeData;
-//    }
-    // updated 
-    
     @PostMapping("/create")
     public dto createEmployee(@Valid @RequestBody dto empDTO) {
-        return new dto(empDTO.getName(), empDTO.getSalary());
+        return payrollService.createEmployee(empDTO);
     }
-
 
     @PutMapping("/update")
     public String updateEmployee(@RequestBody Map<String, Object> employeeData) {
-        return "Updated employee: " + employeeData;
+        return payrollService.updateEmployee(employeeData);
     }
 
     @DeleteMapping("/delete/{id}")
     public String deleteEmployee(@PathVariable("id") int id) {
-        return "Deleted employee with ID: " + id;
+        return payrollService.deleteEmployee(id);
     }
 }
